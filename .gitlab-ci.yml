@@ -1,0 +1,44 @@
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "cx-dev"'
+      variables:
+        TAG: $CI_COMMIT_SHORT_SHA
+    - if: '$CI_COMMIT_TAG =~ /^RC-.*/ || $CI_COMMIT_TAG =~ /^v.*/'
+      variables:
+        TAG: $CI_COMMIT_TAG
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+      variables:
+        TAG:  $CI_COMMIT_SHORT_SHA  
+stages:
+  - build
+build_server:
+  tags:
+    - shell
+  stage:  build
+  script:  
+    - |
+      export VERS=$(cat "./ui/.nvmrc")
+      docker login $HARBOR_REGISTRY -u $HARBOR_REGISTRY_USERNAME -p $HARBOR_REGISTRY_PASSWORD 2>/dev/null
+      docker build -f Dockerfile-cx -t $HARBOR_REGISTRY/cx-mon/observ-ui-perses:$TAG --build-arg NODE_VERS=${VERS:1} .
+      if [[ $CI_COMMIT_BRANCH == "cx-dev" ]]; then
+        docker tag $HARBOR_REGISTRY/cx-mon/observ-ui-perses:$TAG $HARBOR_REGISTRY/cx-mon/observ-ui-perses:latest
+      fi
+      docker push -a $HARBOR_REGISTRY/cx-mon/observ-ui-perses
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^RC-.*/ || $CI_COMMIT_TAG =~ /^v.*/ || $CI_COMMIT_BRANCH == "cx-dev"'
+    - when: never
+build_cli:
+  tags:
+    - shell
+  stage:  build
+  script:
+    - |  
+      docker login $HARBOR_REGISTRY -u $HARBOR_REGISTRY_USERNAME -p $HARBOR_REGISTRY_PASSWORD 2>/dev/null
+      docker build -f Dockerfile-cx-cli -t $HARBOR_REGISTRY/cx-mon/percli:$TAG .
+      if [[ $CI_COMMIT_BRANCH == "cx-dev" ]]; then
+        docker tag $HARBOR_REGISTRY/cx-mon/percli:$TAG $HARBOR_REGISTRY/cx-mon/percli:latest
+      fi
+      docker push -a $HARBOR_REGISTRY/cx-mon/percli
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^RC-.*/ || $CI_COMMIT_TAG =~ /^v.*/ || $CI_COMMIT_BRANCH == "cx-dev"'
+    - when: never
