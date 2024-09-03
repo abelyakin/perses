@@ -113,7 +113,7 @@ spec: {
     display: {
         name: #grafanaDashboard.title
     }
-    variables: [ for _, grafanaVar in #grafanaDashboard.templating.list if grafanaVar.type != "datasource" {
+    variables: [ for _, grafanaVar in #grafanaDashboard.templating.list if grafanaVar.type != "datasource" && grafanaVar.type != "adhoc" {
         _displayConversion: {
             #var: _
 
