@@ -20,8 +20,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Tooltip,
   Typography,
   styled,
+  useTheme,
 } from '@mui/material';
 import {
   QueryDefinition,
@@ -32,26 +34,41 @@ import {
   msToPrometheusDuration,
 } from '@perses-dev/core';
 import { QueryData } from '@perses-dev/plugin-system';
-import { ReactNode } from 'react';
+import { ReactNode, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import InformationIcon from 'mdi-material-ui/Information';
-import { getConsistentServiceColor } from '../tracing-gantt-chart/TracingGanttChart/utils';
+import { useChartsTheme } from '@perses-dev/components';
+import { getServiceColor } from '../tracing-gantt-chart/TracingGanttChart/utils';
+import { TraceTableOptions } from './trace-table-model';
 
-const DATE_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
+const DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
   dateStyle: 'long',
   timeStyle: 'medium',
-};
-const DATE_FORMATTER = new Intl.DateTimeFormat(undefined, DATE_FORMAT_OPTIONS).format;
+}).format;
+const UTC_DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
+  dateStyle: 'long',
+  timeStyle: 'long',
+  timeZone: 'UTC',
+}).format;
 
 export type TraceLink = (params: { query: QueryDefinition; traceId: string }) => string;
 
 export interface DataTableProps {
+  options: TraceTableOptions;
   result: Array<QueryData<TraceData>>;
   traceLink?: TraceLink;
 }
 
 export function DataTable(props: DataTableProps) {
-  const { result, traceLink } = props;
+  const { options, result, traceLink } = props;
+  const muiTheme = useTheme();
+  const chartsTheme = useChartsTheme();
+
+  const paletteMode = options.visual?.palette?.mode;
+  const serviceColorGenerator = useCallback(
+    (serviceName: string) => getServiceColor(muiTheme, chartsTheme, paletteMode, serviceName),
+    [muiTheme, chartsTheme, paletteMode]
+  );
 
   if (!result) {
     return null;
@@ -63,7 +80,7 @@ export function DataTable(props: DataTableProps) {
       ? (traceId: string) => traceLink({ query: JSON.parse(JSON.stringify(query.definition)), traceId })
       : undefined;
     for (const trace of query.data?.searchResult || []) {
-      rows.push(buildRow(trace, traceLinkWithQuery));
+      rows.push(buildRow(trace, serviceColorGenerator, traceLinkWithQuery));
     }
   }
 
@@ -73,7 +90,7 @@ export function DataTable(props: DataTableProps) {
         <TableHead>
           <TableRow>
             <StyledTableCell>
-              <Typography>Trace Name</Typography>
+              <Typography>Trace name</Typography>
             </StyledTableCell>
             <StyledTableCell>
               <Typography>Spans</Typography>
@@ -92,7 +109,11 @@ export function DataTable(props: DataTableProps) {
   );
 }
 
-function buildRow(trace: TraceSearchResult, traceLink?: (traceId: string) => string): ReactNode {
+function buildRow(
+  trace: TraceSearchResult,
+  serviceColorGenerator: (serviceName: string) => string,
+  traceLink?: (traceId: string) => string
+): ReactNode {
   let totalSpanCount = 0;
   let totalErrorCount = 0;
   for (const stats of Object.values(trace.serviceStats)) {
@@ -104,7 +125,7 @@ function buildRow(trace: TraceSearchResult, traceLink?: (traceId: string) => str
     <StyledTableRow key={trace.traceId}>
       <StyledTableCell>
         {buildTraceName(trace, traceLink)}
-        {buildServiceStatsChips(trace.serviceStats)}
+        {buildServiceStatsChips(trace.serviceStats, serviceColorGenerator)}
       </StyledTableCell>
       <StyledTableCell>
         <Typography display="inline">{totalSpanCount} spans</Typography>
@@ -125,7 +146,9 @@ function buildRow(trace: TraceSearchResult, traceLink?: (traceId: string) => str
         </Typography>
       </StyledTableCell>
       <StyledTableCell>
-        <Typography>{DATE_FORMATTER(new Date(trace.startTimeUnixMs))}</Typography>
+        <Tooltip title={UTC_DATE_FORMATTER(new Date(trace.startTimeUnixMs))} placement="top" arrow>
+          <Typography display="inline">{DATE_FORMATTER(new Date(trace.startTimeUnixMs))}</Typography>
+        </Tooltip>
       </StyledTableCell>
     </StyledTableRow>
   );
@@ -150,7 +173,10 @@ function buildTraceName(trace: TraceSearchResult, traceLink?: (traceId: string) 
   );
 }
 
-function buildServiceStatsChips(serviceStats: Record<string, ServiceStats>) {
+function buildServiceStatsChips(
+  serviceStats: Record<string, ServiceStats>,
+  serviceColorGenerator: (serviceName: string) => string
+) {
   return Object.entries(serviceStats).map(([serviceName, stats]) => (
     <Chip
       key={serviceName}
@@ -158,7 +184,15 @@ function buildServiceStatsChips(serviceStats: Record<string, ServiceStats>) {
       sx={{ marginTop: '5px', marginRight: '5px' }}
       variant="outlined"
       size="small"
-      avatar={<Avatar sx={{ backgroundColor: getConsistentServiceColor(serviceName) }}>{stats.spanCount}</Avatar>}
+      style={{ borderColor: serviceColorGenerator(serviceName) }}
+      avatar={
+        <Avatar
+          sx={{ fontSize: '0.65rem', fontWeight: 'bold', textShadow: '0 0 5px #fff' }}
+          style={{ backgroundColor: serviceColorGenerator(serviceName) }}
+        >
+          {stats.spanCount}
+        </Avatar>
+      }
     />
   ));
 }

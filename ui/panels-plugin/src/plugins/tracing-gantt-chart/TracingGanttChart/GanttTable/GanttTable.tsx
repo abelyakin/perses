@@ -16,19 +16,22 @@ import { Span } from '@perses-dev/core';
 import { useMemo, useRef, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Viewport } from '../utils';
+import { TracingGanttChartOptions } from '../../gantt-chart-model';
 import { useGanttTableContext } from './GanttTableProvider';
 import { GanttTableRow } from './GanttTableRow';
 import { GanttTableHeader } from './GanttTableHeader';
 import { ResizableDivider } from './ResizableDivider';
 
 export interface GanttTableProps {
+  options: TracingGanttChartOptions;
   rootSpan: Span;
   viewport: Viewport;
+  selectedSpan?: Span;
   onSpanClick: (span: Span) => void;
 }
 
 export function GanttTable(props: GanttTableProps) {
-  const { rootSpan, viewport, onSpanClick } = props;
+  const { options, rootSpan, viewport, selectedSpan, onSpanClick } = props;
   const { collapsedSpans, setVisibleSpans } = useGanttTableContext();
   const [nameColumnWidth, setNameColumnWidth] = useState<number>(0.25);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -67,8 +70,10 @@ export function GanttTable(props: GanttTableProps) {
         data={rows}
         itemContent={(_, span) => (
           <GanttTableRow
+            options={options}
             span={span}
             viewport={viewport}
+            selected={span === selectedSpan}
             nameColumnWidth={nameColumnWidth}
             divider={divider}
             onClick={onSpanClick}

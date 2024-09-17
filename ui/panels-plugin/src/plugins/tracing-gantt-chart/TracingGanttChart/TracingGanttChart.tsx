@@ -14,14 +14,18 @@
 import { useRef, useState } from 'react';
 import { Box, Stack, useTheme } from '@mui/material';
 import { Span } from '@perses-dev/core';
+import { TracingGanttChartOptions } from '../gantt-chart-model';
 import { MiniGanttChart } from './MiniGanttChart/MiniGanttChart';
 import { DetailPane } from './DetailPane/DetailPane';
 import { Viewport } from './utils';
 import { GanttTable } from './GanttTable/GanttTable';
 import { GanttTableProvider } from './GanttTable/GanttTableProvider';
 import { ResizableDivider } from './GanttTable/ResizableDivider';
+import { AttributeLinks } from './DetailPane/Attributes';
 
 export interface TracingGanttChartProps {
+  options: TracingGanttChartOptions;
+  attributeLinks?: AttributeLinks;
   rootSpan: Span;
 }
 
@@ -32,7 +36,7 @@ export interface TracingGanttChartProps {
  * https://github.com/jaegertracing/jaeger-ui
  */
 export function TracingGanttChart(props: TracingGanttChartProps) {
-  const { rootSpan } = props;
+  const { options, attributeLinks, rootSpan } = props;
 
   const theme = useTheme();
   const [selectedSpan, setSelectedSpan] = useState<Span | undefined>(undefined);
@@ -50,16 +54,27 @@ export function TracingGanttChart(props: TracingGanttChartProps) {
   return (
     <Stack ref={ganttChart} direction="row" sx={{ height: '100%', minHeight: '240px', gap }}>
       <Stack sx={{ flexGrow: 1, gap }}>
-        <MiniGanttChart rootSpan={rootSpan} viewport={viewport} setViewport={setViewport} />
+        <MiniGanttChart options={options} rootSpan={rootSpan} viewport={viewport} setViewport={setViewport} />
         <GanttTableProvider>
-          <GanttTable rootSpan={rootSpan} viewport={viewport} onSpanClick={setSelectedSpan} />
+          <GanttTable
+            options={options}
+            rootSpan={rootSpan}
+            viewport={viewport}
+            selectedSpan={selectedSpan}
+            onSpanClick={setSelectedSpan}
+          />
         </GanttTableProvider>
       </Stack>
       {selectedSpan && (
         <>
           <ResizableDivider parentRef={ganttChart} spacing={parseInt(theme.spacing(gap))} onMove={setTableWidth} />
           <Box sx={{ width: `${(1 - tableWidth) * 100}%`, overflow: 'auto' }}>
-            <DetailPane rootSpan={rootSpan} span={selectedSpan} onCloseBtnClick={() => setSelectedSpan(undefined)} />
+            <DetailPane
+              attributeLinks={attributeLinks}
+              rootSpan={rootSpan}
+              span={selectedSpan}
+              onCloseBtnClick={() => setSelectedSpan(undefined)}
+            />
           </Box>
         </>
       )}
