@@ -81,6 +81,12 @@ if #panel.type != _|_ if #panel.type == "timeseries" || #panel.type == "graph" {
 				#lineWidth,
 			][0]
 		}
+		
+		// cldx patch: add categorical to map custom color palette.
+		// https://github.com/perses/perses/blob/main/docs/plugins/panels.md#palette-specification
+		visual: palette: {
+			mode: "categorical"
+		}
 
 		#fillOpacity: *#panel.fieldConfig.defaults.custom.fillOpacity | null
 		if #fillOpacity != null {
