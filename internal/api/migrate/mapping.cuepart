@@ -17,6 +17,8 @@ import (
         m: "minutes"
         h: "hours"
         d: "days"
+        dtdurations: "seconds"
+        dtdurationms: "milliseconds"
         // percent units
         percent: "percent"
         percentunit: "percent-decimal"
