@@ -260,7 +260,8 @@ spec: {
             kind: "Grid"
             spec: {
                 display: {
-                    title: grafanaPanel.title,
+                    // title is optional in grafana
+                    title: *grafanaPanel.title | "",
                     collapse: {
                         open: !grafanaPanel.collapsed
                     }
