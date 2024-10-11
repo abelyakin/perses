@@ -21,7 +21,7 @@ if #panel.type != _|_ if #panel.type == "timeseries" || #panel.type == "graph" {
 				}
 				if #panel.type == "graph" {
 					position: [ // switch
-						if #panel.options.legend.placement != _|_ if #panel.options.legend.placement == "right" {"right"},
+						if #panel.legend.rightSide != _|_ if #panel.legend.rightSide { "right" },
 						{"bottom"}
 					][0]
 					mode: [
