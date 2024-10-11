@@ -23,12 +23,12 @@ import (
 	"github.com/perses/perses/internal/cli/config"
 	"github.com/perses/perses/internal/cli/output"
 	"github.com/perses/perses/pkg/client/api"
-	"github.com/perses/perses/pkg/client/perseshttp"
-	modelAPI "github.com/perses/perses/pkg/model/api"
+	clientConfig "github.com/perses/perses/pkg/client/config"
 	backendConfig "github.com/perses/perses/pkg/model/api/config"
 	"github.com/perses/perses/pkg/model/api/v1/common"
 	"github.com/perses/perses/pkg/model/api/v1/secret"
 	"github.com/spf13/cobra"
+	"golang.org/x/oauth2"
 )
 
 type externalAuthKind string
@@ -47,13 +47,14 @@ const (
 )
 
 type loginOption interface {
-	Login() (*modelAPI.AuthResponse, error)
+	Login() (*oauth2.Token, error)
 	SetMissingInput() error
 }
 
 type option struct {
 	persesCMD.Option
 	writer               io.Writer
+	errWriter            io.Writer
 	url                  *common.URL
 	isNativeSelected     bool
 	username             string
@@ -66,7 +67,7 @@ type option struct {
 	refreshToken         string
 	insecureTLS          bool
 	apiClient            api.ClientInterface
-	restConfig           perseshttp.RestConfigClient
+	restConfig           clientConfig.RestConfigClient
 	remoteConfig         *backendConfig.Config
 }
 
@@ -96,7 +97,7 @@ func (o *option) Complete(args []string) error {
 		o.restConfig.TLSConfig = &secret.TLSConfig{}
 	}
 	o.restConfig.TLSConfig.InsecureSkipVerify = o.insecureTLS
-	restClient, err := perseshttp.NewFromConfig(o.restConfig)
+	restClient, err := clientConfig.NewRESTClient(o.restConfig)
 	if err != nil {
 		return err
 	}
@@ -185,6 +186,10 @@ func (o *option) Execute() error {
 
 func (o *option) SetWriter(writer io.Writer) {
 	o.writer = writer
+}
+
+func (o *option) SetErrWriter(errWriter io.Writer) {
+	o.errWriter = errWriter
 }
 
 func (o *option) newLoginOption() (loginOption, error) {

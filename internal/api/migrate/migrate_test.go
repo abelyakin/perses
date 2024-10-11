@@ -64,6 +64,18 @@ func TestMigrate(t *testing.T) {
 			expectedPersesDashboardFile: "empty_panels_list_perses_dashboard.json",
 			expectedErrorStr:            "",
 		},
+		{
+			title:                       "dashboard with simple table panels, focused on validating the migration of column settings",
+			inputGrafanaDashboardFile:   "tables_grafana_dashboard.json",
+			expectedPersesDashboardFile: "tables_perses_dashboard.json",
+			expectedErrorStr:            "",
+		},
+		{
+			title:                       "dashboard with a stat panel that has undefined reduceOptions",
+			inputGrafanaDashboardFile:   "stat_calc_undefined_grafana_dashboard.json",
+			expectedPersesDashboardFile: "stat_calc_undefined_perses_dashboard.json",
+			expectedErrorStr:            "",
+		},
 	}
 
 	for _, test := range testSuite {
