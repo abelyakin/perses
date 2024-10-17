@@ -64,7 +64,8 @@ export function TablePanel({ contentDimensions, spec }: TableProps) {
         if (ts.values[0] === undefined) {
           return { ...ts.labels };
         }
-        return { timestamp: ts.values[0][0], value: ts.values[0][1], ...ts.labels }; // TODO: support multiple values and timestamps
+        // CX PATCH: changed columns order (values go to the last position)
+        return { timestamp: ts.values[0][0], ...ts.labels, value: ts.values[0][1] }; // TODO: support multiple values and timestamps
       });
   }, [queryResults]);
 
