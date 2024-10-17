@@ -63,8 +63,7 @@ if #panel.type != _|_ if #panel.type == "table" {
 			}
 		}
 
-		columnSettings: 
-			[for settingsID, settings in _settingsGatherer {
+		columnSettings: [for settingsID, settings in _settingsGatherer {
 				name: settingsID
 				if settings.headers != _|_ if len(settings.headers) > 0 {
 					let headers = [for settingKey, _ in settings.headers { settingKey }]
