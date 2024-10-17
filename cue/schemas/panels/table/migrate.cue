@@ -64,22 +64,65 @@ if #panel.type != _|_ if #panel.type == "table" {
 		}
 
 		columnSettings: [for settingsID, settings in _settingsGatherer {
-			name: settingsID
-			if settings.headers != _|_ if len(settings.headers) > 0 {
-				let headers = [for settingKey, _ in settings.headers { settingKey }]
-				// Why do we take the last element here: it's mostly based on grafana's behavior
-				// - field overrides take precedence over the organize transformation (organize transformation was processed first above)
-				// - if there are multiple overrides for the same field, the last one takes precedence
-				header: headers[len(headers) - 1]
-			}
-			if settings.hide != _|_ {
-				hide: settings.hide
-			}
-			if settings.widths != _|_ if len(settings.widths) > 0 {
-				let widths = [for settingKey, _ in settings.widths { settingKey }]
-				width: strconv.Atoi(widths[len(widths) - 1])
-			}
-		}]
+				name: settingsID
+				if settings.headers != _|_ if len(settings.headers) > 0 {
+					let headers = [for settingKey, _ in settings.headers { settingKey }]
+					// Why do we take the last element here: it's mostly based on grafana's behavior
+					// - field overrides take precedence over the organize transformation (organize transformation was processed first above)
+					// - if there are multiple overrides for the same field, the last one takes precedence
+					header: headers[len(headers) - 1]
+				}
+				if settings.hide != _|_ {
+					hide: settings.hide
+				}
+				if settings.widths != _|_ if len(settings.widths) > 0 {
+					let widths = [for settingKey, _ in settings.widths { settingKey }]
+					width: strconv.Atoi(widths[len(widths) - 1])
+				}
+			},
+			// local CX patch for hiding of unnecessary columns
+			{
+    		  "name": "cldx_tenant_id",
+    		  "hide": true
+    		},
+    		{
+    		  "name": "cldx_vpc_id",
+    		  "hide": true
+    		},
+			{
+    		  "name": "cldx_stack_type",
+    		  "hide": true
+    		},
+    		{
+    		  "name": "cldx_stack_id",
+    		  "hide": true
+    		},
+			{
+    		  "name": "cldx_resource_id",
+    		  "hide": true
+    		},
+			{
+    		  "name": "landscape",
+    		  "hide": true
+    		},
+			{
+    		  "name": "zone",
+    		  "hide": true
+    		},
+			{
+    		  "name": "__name__",
+    		  "hide": true
+    		},
+			{
+    		  "name": "timestamp",
+    		  "hide": true
+    		},
+    		{
+    		  "name": "hostname",
+    		  "hide": true
+    		}
+			// end of patch
+			]
 	}
 },
 if #panel.type != _|_ if #panel.type == "table-old" {
