@@ -81,7 +81,7 @@ if #panel.type != _|_ if #panel.type == "table" {
 					width: strconv.Atoi(widths[len(widths) - 1])
 				}
 			},
-			// local CX patch for excluding list of unnecessary columns (see on the top of file)
+			// local CX patch for hiding of unnecessary columns
 			{
     		  "name": "cldx_tenant_id",
     		  "hide": true
