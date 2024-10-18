@@ -1,0 +1,6 @@
+{
+  "kind": "StatusHistoryChart",
+  "spec": {
+   "label": false
+  }
+}

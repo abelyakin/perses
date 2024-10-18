@@ -1,0 +1,1 @@
+{"version":3,"file":"theme-gen.d.ts","sourceRoot":"","sources":["theme-gen.ts"],"names":[],"mappings":"AAaA,OAAO,EAAE,KAAK,EAAE,MAAM,eAAe,CAAC;AAEtC,OAAO,EAAgB,iBAAiB,EAAE,MAAM,UAAU,CAAC;AAK3D,KAAK,QAAQ,GAAG,IAAI,CAAC,KAAK,EAAE,YAAY,CAAC,CAAC;AAE1C,wBAAgB,mBAAmB,CACjC,QAAQ,EAAE,QAAQ,EAClB,yBAAyB,EAAE,OAAO,CAAC,iBAAiB,CAAC,GACpD,iBAAiB,CAiPnB"}

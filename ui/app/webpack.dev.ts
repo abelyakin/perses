@@ -70,7 +70,7 @@ const devConfig: Configuration = {
     proxy: [
       {
         context: ['/api', '/proxy'],
-        target: 'http://localhost:8080',
+        target: 'http://localhost:8888',
       }
     ],
     client: {
