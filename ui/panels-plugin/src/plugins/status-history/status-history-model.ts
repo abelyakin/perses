@@ -12,9 +12,7 @@
 // limitations under the License.
 
 export function createInitialStatusHistoryChartOptions() {
-    return {
-    };
+  return {};
 }
 
-export interface StatusHistoryChartOptions {
-}
+export interface StatusHistoryChartOptions {}
