@@ -173,7 +173,7 @@ spec: {
                 if grafanaVar.sort != _|_ if #mapping.sort[grafanaVar.sort] != _|_ {
                     sort: #mapping.sort[grafanaVar.sort]
                 }
-                if (*(grafanaVar.current.value) | _|_ ) != _|_ {
+                if grafanaVar.current != _|_ if grafanaVar.current.value != _|_ {
                     defaultValue: grafanaVar.current.value
                 }
                 #var: grafanaVar
