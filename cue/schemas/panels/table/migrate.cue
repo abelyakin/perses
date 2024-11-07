@@ -19,7 +19,50 @@ if (*#panel.type | null) == "table" {
 				#var,
 			][0]
 		}
-
+		_customCxFilter: [
+		// local CX patch for hiding of unnecessary columns
+			{
+    		  "name": "cldx_tenant_id",
+    		  "hide": true
+    		},
+    		{
+    		  "name": "cldx_vpc_id",
+    		  "hide": true
+    		},
+			{
+    		  "name": "cldx_stack_type",
+    		  "hide": true
+    		},
+    		{
+    		  "name": "cldx_stack_id",
+    		  "hide": true
+    		},
+			{
+    		  "name": "cldx_resource_id",
+    		  "hide": true
+    		},
+			{
+    		  "name": "landscape",
+    		  "hide": true
+    		},
+			{
+    		  "name": "zone",
+    		  "hide": true
+    		},
+			{
+    		  "name": "__name__",
+    		  "hide": true
+    		},
+			{
+    		  "name": "timestamp",
+    		  "hide": true
+    		},
+    		{
+    		  "name": "hostname",
+    		  "hide": true
+    		}
+			// end of patch
+		]
 		columnSettings: list.Concat([
 			for transformation in (*#panel.transformations | [])
 			// In Grafana, when ordering column at least one column, it will give an index to all columns (in indexByName map).
@@ -66,6 +109,7 @@ if (*#panel.type | null) == "table" {
 					}
 				},
 			],
+			_customCxFilter
 		])
 
 		// Using flatten to avoid having an array of arrays with "value" mappings
