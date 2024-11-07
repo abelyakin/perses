@@ -12,11 +12,10 @@
 // limitations under the License.
 
 package model
+
 import (
 	"github.com/perses/perses/cue/schemas/common"
 )
-
-#legendValue: common.#calculation
 
 #legend: {
 	position: "bottom" | "right"
@@ -25,6 +24,8 @@ import (
 }
 
 kind: "StatusHistoryChart"
+
 spec: close({
-	legend?:    #legend
+	legend?: #legend
+	mappings?: [...common.#mappings]
 })
