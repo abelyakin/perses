@@ -36,7 +36,7 @@ export function ValueMappingsEditor({ mappings, onChange }: ValueMappingsEditorP
 
   function handleAddValueMappingEditor(): void {
     const updatedValueMapings = [...valueMappings];
-    updatedValueMapings.push({ kind: 'Value' } as ValueMapping);
+    updatedValueMapings.push({ kind: 'Value', spec: { result: { value: '' } } } as ValueMapping);
     setValueMappings(updatedValueMapings);
     onChange(updatedValueMapings);
   }

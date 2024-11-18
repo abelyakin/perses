@@ -210,7 +210,7 @@ export function ValueMappingEditor({ mapping, onChange, onDelete, ...props }: Va
       <Grid xs={4}>
         <TextField
           label="Display text"
-          value={mapping.spec?.result?.value}
+          value={mapping.spec?.result?.value ?? ''}
           onChange={(e) =>
             onChange({
               ...mapping,

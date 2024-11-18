@@ -11,7 +11,8 @@ export function applyValueMapping(value: number | string, mappings: ValueMapping
     switch (mapping.kind) {
       case 'Value': {
         const valueOptions = mapping.spec;
-        if (String(valueOptions.value) === value) {
+
+        if (String(valueOptions.value) === String(value)) {
           mappedItem.value = valueOptions.result.value;
           mappedItem.color = valueOptions.result.color;
         }

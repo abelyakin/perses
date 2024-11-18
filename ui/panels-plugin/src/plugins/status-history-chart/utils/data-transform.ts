@@ -11,17 +11,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { getColorForValue, LegendItem } from '@perses-dev/components';
-import { TimeScale, TimeSeriesData } from '@perses-dev/core';
+import { FALLBACK_COLOR, getColorsForValues, LegendItem, StatusHistoryDataItem } from '@perses-dev/components';
+import { applyValueMapping, TimeScale, TimeSeriesData } from '@perses-dev/core';
 import { QueryData } from '@perses-dev/plugin-system';
+import { useMemo } from 'react';
+import { StatusHistoryChartOptions } from '../status-history-model';
 import { getCommonTimeScaleForQueries } from './get-timescale';
 
 interface StatusHistoryDataModel {
   legendItems: LegendItem[];
-  statusHistoryData: Array<[number, number, number | undefined]>;
+  statusHistoryData: StatusHistoryDataItem[];
   xAxisCategories: number[];
   yAxisCategories: string[];
   timeScale?: TimeScale;
+  colors: Array<{
+    value: string | number;
+    color: string;
+  }>;
 }
 
 function generateCompleteTimestamps(timescale?: TimeScale): number[] {
@@ -36,63 +42,102 @@ function generateCompleteTimestamps(timescale?: TimeScale): number[] {
   return timestamps;
 }
 
-export function createStatusHistoryDataModel(
+export function useStatusHistoryDataModel(
   queryResults: Array<QueryData<TimeSeriesData>>,
-  colors: string[]
+  themeColors: string[],
+  spec: StatusHistoryChartOptions
 ): StatusHistoryDataModel {
-  if (!queryResults || queryResults.length === 0) {
-    return {
-      legendItems: [],
-      statusHistoryData: [],
-      xAxisCategories: [],
-      yAxisCategories: [],
-    };
-  }
-
-  const timeScale = getCommonTimeScaleForQueries(queryResults);
-  const statusHistoryData: Array<[number, number, number]> = [];
-  const yAxisCategories: string[] = [];
-  const legendSet = new Set<number>();
-
-  const xAxisCategories = generateCompleteTimestamps(timeScale);
-
-  queryResults.forEach(({ data }) => {
-    if (!data) {
-      return;
+  return useMemo(() => {
+    if (!queryResults || queryResults.length === 0) {
+      return {
+        legendItems: [],
+        statusHistoryData: [],
+        xAxisCategories: [],
+        yAxisCategories: [],
+        colors: [],
+      };
     }
 
-    data.series.forEach((item) => {
-      const instance = item.formattedName || '';
+    const timeScale = getCommonTimeScaleForQueries(queryResults);
+    const statusHistoryData: StatusHistoryDataItem[] = [];
+    const yAxisCategories: string[] = [];
+    const legendSet = new Set<number>();
+    const hasValueMappings = spec.valueMappings?.length;
 
-      yAxisCategories.push(instance);
+    const xAxisCategories = generateCompleteTimestamps(timeScale);
 
-      const yIndex = yAxisCategories.length - 1;
+    queryResults.forEach(({ data }) => {
+      if (!data) {
+        return;
+      }
 
-      item.values.forEach(([time, value]) => {
-        const itemIndexOnXaxis = xAxisCategories.findIndex((v) => v === time);
+      data.series.forEach((item) => {
+        const instance = item.formattedName || '';
 
-        if (value !== null && itemIndexOnXaxis !== -1) {
-          legendSet.add(value);
-          statusHistoryData.push([itemIndexOnXaxis, yIndex, value]);
-        }
+        yAxisCategories.push(instance);
+
+        const yIndex = yAxisCategories.length - 1;
+
+        item.values.forEach(([time, value]) => {
+          const itemIndexOnXaxis = xAxisCategories.findIndex((v) => v === time);
+          if (value !== null && itemIndexOnXaxis !== -1) {
+            let itemLabel: string | number = value;
+            if (hasValueMappings) {
+              const mappedValue = applyValueMapping(value, spec.valueMappings);
+              itemLabel = mappedValue.value;
+            }
+            legendSet.add(value);
+            statusHistoryData.push({
+              value: [itemIndexOnXaxis, yIndex, value],
+              label: String(itemLabel),
+            });
+          }
+        });
       });
     });
-  });
 
-  const legendItems: LegendItem[] = Array.from(legendSet).map((value, idx) => {
-    const color = colors[idx] || getColorForValue(value, colors[0] || '#1f77b4');
+    const uniqueValues = Array.from(legendSet);
+    const colorsForValues = getColorsForValues(uniqueValues, themeColors);
+
+    // get colors from theme and generate colors if not provided
+    const colors = uniqueValues.map((value, index) => {
+      let valueColor: string = colorsForValues[index] ?? FALLBACK_COLOR;
+
+      if (hasValueMappings) {
+        const mappedValue = applyValueMapping(value, spec.valueMappings);
+        valueColor = mappedValue.color ?? valueColor;
+      }
+
+      return {
+        value,
+        color: valueColor,
+      };
+    });
+
+    const legendItems: LegendItem[] = uniqueValues.map((value, idx) => {
+      let label = String(value);
+
+      if (hasValueMappings) {
+        const mappedValue = applyValueMapping(value, spec.valueMappings);
+        label = String(mappedValue.value);
+      }
+
+      const color = colors.find((i) => i.value === value)?.color || FALLBACK_COLOR;
+
+      return {
+        id: `${idx}-${value}`,
+        label,
+        color,
+      };
+    });
+
     return {
-      id: `${idx}-${value}`,
-      label: String(value),
-      color,
+      xAxisCategories,
+      yAxisCategories,
+      legendItems,
+      statusHistoryData,
+      timeScale,
+      colors,
     };
-  });
-
-  return {
-    xAxisCategories,
-    yAxisCategories,
-    legendItems,
-    statusHistoryData,
-    timeScale,
-  };
+  }, [queryResults, spec.valueMappings, themeColors]);
 }
