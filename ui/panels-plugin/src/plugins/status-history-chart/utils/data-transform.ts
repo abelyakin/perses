@@ -62,7 +62,7 @@ export function useStatusHistoryDataModel(
     const statusHistoryData: StatusHistoryDataItem[] = [];
     const yAxisCategories: string[] = [];
     const legendSet = new Set<number>();
-    const hasValueMappings = spec.valueMappings?.length;
+    const hasValueMappings = spec.mappings?.length;
 
     const xAxisCategories = generateCompleteTimestamps(timeScale);
 
@@ -83,7 +83,7 @@ export function useStatusHistoryDataModel(
           if (value !== null && itemIndexOnXaxis !== -1) {
             let itemLabel: string | number = value;
             if (hasValueMappings) {
-              const mappedValue = applyValueMapping(value, spec.valueMappings);
+              const mappedValue = applyValueMapping(value, spec.mappings);
               itemLabel = mappedValue.value;
             }
             legendSet.add(value);
@@ -104,7 +104,7 @@ export function useStatusHistoryDataModel(
       let valueColor: string = colorsForValues[index] ?? FALLBACK_COLOR;
 
       if (hasValueMappings) {
-        const mappedValue = applyValueMapping(value, spec.valueMappings);
+        const mappedValue = applyValueMapping(value, spec.mappings);
         valueColor = mappedValue.color ?? valueColor;
       }
 
@@ -118,7 +118,7 @@ export function useStatusHistoryDataModel(
       let label = String(value);
 
       if (hasValueMappings) {
-        const mappedValue = applyValueMapping(value, spec.valueMappings);
+        const mappedValue = applyValueMapping(value, spec.mappings);
         label = String(mappedValue.value);
       }
 
@@ -139,5 +139,5 @@ export function useStatusHistoryDataModel(
       timeScale,
       colors,
     };
-  }, [queryResults, spec.valueMappings, themeColors]);
+  }, [queryResults, spec.mappings, themeColors]);
 }

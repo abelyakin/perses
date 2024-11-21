@@ -20,7 +20,7 @@ export function createInitialStatusHistoryChartOptions() {
 
 export interface StatusHistoryChartOptions {
   legend?: LegendSpecOptions;
-  valueMappings?: ValueMapping[];
+  mappings?: ValueMapping[];
 }
 
 export type StatusHistroyChartEditorProps = OptionsEditorProps<StatusHistoryChartOptions>;

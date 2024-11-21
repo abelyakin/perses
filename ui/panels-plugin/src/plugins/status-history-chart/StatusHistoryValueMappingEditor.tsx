@@ -19,9 +19,9 @@ import { StatusHistoryChartOptions } from './status-history-model';
 export type StatusHistoryValueMappingEditorProps = OptionsEditorProps<StatusHistoryChartOptions>;
 
 export function StatusHistoryValueMappingEditor({ onChange, value }: StatusHistoryValueMappingEditorProps) {
-  function handleValueMappingChange(valueMappings: ValueMapping[]): void {
-    onChange({ ...value, valueMappings });
+  function handleValueMappingChange(mappings: ValueMapping[]): void {
+    onChange({ ...value, mappings });
   }
 
-  return <ValueMappingsEditor mappings={value.valueMappings ?? []} onChange={handleValueMappingChange} />;
+  return <ValueMappingsEditor mappings={value.mappings ?? []} onChange={handleValueMappingChange} />;
 }
