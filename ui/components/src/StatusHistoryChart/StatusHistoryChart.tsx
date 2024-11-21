@@ -25,13 +25,11 @@ import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { TimeScale } from '@perses-dev/core';
 import { EChartsCoreOption } from 'echarts';
-import { useMemo } from 'react';
 import { useChartsTheme } from '../context/ChartsProvider';
 import { useTimeZone } from '../context/TimeZoneProvider';
 import { EChart } from '../EChart';
 import { getFormattedStatusHistoryAxisLabel } from './get-formatted-axis-label';
 import { generateTooltipHTML } from './StatusHistoryTooltip';
-import { getColorsForValues } from './utils/get-color';
 
 use([
   EChartsHeatmapChart,
@@ -74,9 +72,10 @@ export function StatusHistoryChart(props: StatusHistoryChartProps) {
   const option: EChartsCoreOption = {
     tooltip: {
       appendToBody: true,
-      formatter: (params: { data: StatusHistoryData; marker: string }) => {
+      formatter: (params: { data: StatusHistoryDataItem; marker: string }) => {
         return generateTooltipHTML({
-          data: params.data,
+          data: params.data.value,
+          label: params.data.label,
           marker: params.marker,
           xAxisCategories,
           yAxisCategories,
