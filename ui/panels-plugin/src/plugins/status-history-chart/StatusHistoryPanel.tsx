@@ -35,11 +35,10 @@ export function StatusHistoryPanel(props: StatusHistoryChartPanelProps) {
   const { statusHistoryData, yAxisCategories, xAxisCategories, legendItems, timeScale, colors } =
     useStatusHistoryDataModel(queryResults, chartsTheme.echartsTheme.color as string[], spec);
 
-  const contentPadding = chartsTheme.container.padding.default;
   const adjustedContentDimensions: typeof contentDimensions = contentDimensions
     ? {
-        width: contentDimensions.width - contentPadding * 2,
-        height: contentDimensions.height - contentPadding * 2,
+        width: contentDimensions.width - PADDING * 2,
+        height: contentDimensions.height - PADDING * 2,
       }
     : undefined;
 

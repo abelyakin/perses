@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { HeatmapChart as EChartsHeatmapChart } from 'echarts/charts';
 import {
   GridComponent,
@@ -25,12 +25,13 @@ import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { TimeScale } from '@perses-dev/core';
 import { EChartsCoreOption } from 'echarts';
+import { useMemo } from 'react';
 import { useChartsTheme } from '../context/ChartsProvider';
 import { useTimeZone } from '../context/TimeZoneProvider';
-import { formatWithTimeZone } from '../utils';
 import { EChart } from '../EChart';
 import { getFormattedStatusHistoryAxisLabel } from './get-formatted-axis-label';
-import { getTooltipPosition } from './utils/get-tooltip-position';
+import { generateTooltipHTML } from './StatusHistoryTooltip';
+import { getColorsForValues } from './utils/get-color';
 
 use([
   EChartsHeatmapChart,
@@ -68,28 +69,19 @@ export function StatusHistoryChart(props: StatusHistoryChartProps) {
   const { height, data, xAxisCategories, yAxisCategories, timeScale, colors } = props;
   const { timeZone } = useTimeZone();
   const chartsTheme = useChartsTheme();
-
-  if (!data) return null;
+  const theme = useTheme();
 
   const option: EChartsCoreOption = {
     tooltip: {
-      position: getTooltipPosition,
-      formatter: (params: { data: { value: StatusHistoryData; label: string } }) => {
-        const {
-          data: { value, label },
-        } = params;
-
-        const [x, y] = value;
-        const xAxisLabel = xAxisCategories[x];
-        const date = xAxisLabel ? new Date(xAxisLabel) : null;
-        const time = date ? formatWithTimeZone(date, 'yyyy-MM-dd HH:mm:ss', timeZone) : '';
-        return `
-              <div style="padding: 5px;">
-                  ${time}<br/>
-                  <strong>${yAxisCategories[y]}</strong><br/>
-                  ${label}<br/>
-              </div>
-          `;
+      appendToBody: true,
+      formatter: (params: { data: StatusHistoryData; marker: string }) => {
+        return generateTooltipHTML({
+          data: params.data,
+          marker: params.marker,
+          xAxisCategories,
+          yAxisCategories,
+          theme,
+        });
       },
     },
     grid: {
