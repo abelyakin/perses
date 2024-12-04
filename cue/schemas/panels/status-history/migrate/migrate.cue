@@ -37,6 +37,9 @@ spec: {
 			legend: {
 				position: *(#panel.options.legend.placement & "right") | "bottom"
 				mode:     *(#panel.options.legend.displayMode & "table") | "list"
+				values: [for calc in #panel.options.legend.calcs
+					if (#mapping.calc[calc] != _|_) {#mapping.calc[calc]},
+				]
 			}
 		}
 
