@@ -15,13 +15,10 @@ if #panel.type != _|_ if #panel.type == "status-history" {
 	kind: "StatusHistoryChart"
 	spec: {
 		#showLegend: *#panel.options.legend.showLegend | true
-		if #panel.options.legend != _|_ if #showLegend {
+		if #showLegend {
 			legend: {
 				position: *(#panel.options.legend.placement & "right") | "bottom"
 				mode:     *(#panel.options.legend.displayMode & "table") | "list"
-				values: [for calc in #panel.options.legend.calcs
-					if (#mapping.calc[calc] != _|_) {#mapping.calc[calc]},
-				]
 			}
 		}
 
