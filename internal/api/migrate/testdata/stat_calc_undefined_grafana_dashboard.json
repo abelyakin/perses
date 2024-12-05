@@ -35,7 +35,7 @@
       },
       "id": 19,
       "options": {
-        "graphMode": "none"
+        "graphMode": "area"
       },
       "targets": [
         {
