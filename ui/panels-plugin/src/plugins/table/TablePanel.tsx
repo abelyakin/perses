@@ -119,7 +119,7 @@ export function TablePanel({ contentDimensions, spec }: TableProps) {
           return { ...ts.labels };
         }
         if (queryResults.length === 1) {
-          return { timestamp: ts.values[0][0], value: ts.values[0][1], ...ts.labels };
+          return { timestamp: ts.values[0][0], ...ts.labels, value: ts.values[0][1] };
         }
 
         // If there is more than one query, we need to add the query index to the value key to avoid conflicts
