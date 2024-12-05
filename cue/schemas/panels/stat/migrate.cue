@@ -2,7 +2,7 @@ if (*#panel.type | null) == "stat" {
 	kind: "StatChart"
 	spec: {
 		calculation: *#mapping.calc[#panel.options.reduceOptions.calcs[0]] | #defaultCalc // only consider [0] here as Perses's GaugeChart doesn't support individual calcs
-
+		metricLabel: *#mapping.calc[#panel.options.reduceOptions.fields] | null
 		#unit: *#mapping.unit[#panel.fieldConfig.defaults.unit] | null
 		if #unit != null {
 			format: unit: #unit
@@ -22,7 +22,7 @@ if (*#panel.type | null) == "stat" {
 						if step.value == null {0},
 						{step.value},
 					][0]
-					color: step.color // TODO how to manage the overrides part? 
+					color: step.color // TODO how to manage the overrides part?
 				}]
 			}
 		}
