@@ -170,6 +170,5 @@ if #panel.type != _|_ if #panel.type == "status-history" {
 		if len(x) > 0 {
 			mappings: x
 		}
-
 	}
 }

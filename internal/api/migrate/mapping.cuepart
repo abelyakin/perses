@@ -78,19 +78,19 @@ import (
         "orange": "#ff9830"
         "light-orange": "#ffb357"
         "super-light-orange": "#ffcb7d"
-        
+
         "dark-green": "#37872d"
         "semi-dark-green": "#56a64b"
         "green": "#73bf69"
         "light-green": "#96d98d"
         "super-light-green": "#c8f2c2"
-                
+
         "dark-blue": "#1f60c4"
         "semi-dark-blue": "#3274d9"
         "blue": "#5794f2"
         "light-blue": "#8ab8ff"
         "super-light-blue": "#c0d8ff"
-                        
+
         "dark-purple": "#8f3bb8"
         "semi-dark-purple": "#a352cc"
         "purple": "#b877d9"
@@ -221,14 +221,14 @@ spec: {
         }
         // if the current panel is a row, go through its children panels
         if grafanaPanel.panels != _|_ {
-            for innerPanelId, innerPanel in grafanaPanel.panels { 
+            for innerPanelId, innerPanel in grafanaPanel.panels {
                 "\(grafanaPanelId)_\(innerPanelId)": {
                     _panelConversion & {#panel: innerPanel}
                 }
             }
         }
         // else
-        if grafanaPanel.panels == _|_ { 
+        if grafanaPanel.panels == _|_ {
             "\(grafanaPanelId)": {
                 _panelConversion & {#panel: grafanaPanel}
             }

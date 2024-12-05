@@ -75,6 +75,7 @@ export function StatusHistoryChart(props: StatusHistoryChartProps) {
       formatter: (params: { data: StatusHistoryDataItem; marker: string }) => {
         return generateTooltipHTML({
           data: params.data.value,
+          label: params.data.label,
           marker: params.marker,
           xAxisCategories,
           yAxisCategories,
