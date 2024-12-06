@@ -48,9 +48,7 @@ if #panel.type != _|_ if #panel.type == "status-history" {
 
 				if mapping.type == "range" || mapping.type == "regex" || mapping.type == "special" {
 					#result: {
-						if mapping.options.result.text != _|_ {
-							value: mapping.options.result.text
-						}
+						value: *mapping.options.result.text | ""
 						if mapping.options.result.color != _|_ {
 							color: *#mapping.color[mapping.options.result.color] | mapping.options.result.color
 						}
