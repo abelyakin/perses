@@ -56,7 +56,7 @@ export function getStatChartColor(
 export function convertSparkline(
   chartsTheme: PersesChartsTheme,
   color: string,
-  sparkline?: StatChartSparklineOptions
+  sparkline?: StatChartSparklineOptions,
 ): LineSeriesOption | undefined {
   if (sparkline === undefined) return;
 

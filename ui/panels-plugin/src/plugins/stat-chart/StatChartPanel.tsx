@@ -22,7 +22,7 @@ import {
 } from '@perses-dev/components';
 import { Stack, Typography, SxProps } from '@mui/material';
 import { useMemo } from 'react';
-import { applyValueMapping, TimeSeriesData, ValueMapping } from '@perses-dev/core';
+import { applyValueMapping, Labels, TimeSeriesData, ValueMapping } from '@perses-dev/core';
 import { useDataQueries, UseDataQueryResults, PanelProps } from '@perses-dev/plugin-system';
 import { StatChartOptions } from './stat-chart-model';
 import { convertSparkline, getStatChartColor } from './utils/data-transform';
@@ -102,7 +102,7 @@ const useStatChartData = (
   chartsTheme: PersesChartsTheme
 ): StatChartData[] => {
   return useMemo(() => {
-    const { calculation, mappings } = spec;
+    const { calculation, mappings, metricLabel } = spec;
 
     const statChartData: StatChartData[] = [];
     for (const result of queryResults) {
@@ -111,7 +111,9 @@ const useStatChartData = (
 
       for (const seriesData of result.data.series) {
         const calculatedValue = calculateValue(calculation, seriesData);
-        const displayValue = getValueOrLabel(calculatedValue, mappings);
+
+        const labelValue = getLabelValue(metricLabel, seriesData.labels);
+        const displayValue = getValueOrLabel(calculatedValue, mappings, labelValue);
 
         const color = getStatChartColor(chartsTheme, spec, calculatedValue);
 
@@ -127,10 +129,29 @@ const useStatChartData = (
   }, [queryResults, spec, chartsTheme]);
 };
 
-const getValueOrLabel = (value?: number | null, mappings?: ValueMapping[]): string | number | undefined | null => {
+const getValueOrLabel = (
+  value?: number | null,
+  mappings?: ValueMapping[],
+  label?: string
+): string | number | undefined | null => {
+  if (label) {
+    return label;
+  }
   if (mappings?.length && value) {
     return applyValueMapping(value, mappings).value;
   } else {
     return value;
   }
+};
+
+const getLabelValue = (fieldLabel?: string, labels?: Labels): string | undefined => {
+  if (!labels || !fieldLabel) {
+    return undefined;
+  }
+  for (const [key, value] of Object.entries(labels)) {
+    if (fieldLabel.toLowerCase() === key.toLowerCase()) {
+      return value;
+    }
+  }
+  return undefined;
 };
