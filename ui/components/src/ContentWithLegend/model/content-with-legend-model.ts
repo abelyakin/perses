@@ -12,11 +12,10 @@
 // limitations under the License.
 
 import { Theme } from '@mui/material';
-import { LegendPositions, getLegendMode, LegendSize } from '@perses-dev/core';
+import { LegendPositions, LegendSize } from '@perses-dev/core';
 import { LegendProps } from '../../Legend';
-import { getTableCellLayout } from '../../Table';
 
-type Dimensions = {
+export type Dimensions = {
   width: number;
   height: number;
 };
@@ -106,109 +105,3 @@ export const TABLE_LEGEND_SIZE: LegendSizeConfig = {
     right: 150,
   },
 };
-
-const PANEL_HEIGHT_LG_BREAKPOINT = 300;
-const LEGEND_HEIGHT_SM = 40;
-const LEGEND_HEIGHT_LG = 100;
-
-/**
- * Returns information for laying out content alongside a legend.
- */
-export function getContentWithLegendLayout({
-  width,
-  height,
-  legendProps,
-  legendSize,
-  minChildrenHeight,
-  minChildrenWidth,
-  spacing,
-  theme,
-}: ContentWithLegendLayoutOpts): ContentWithLegendLayout {
-  const legendOptions = legendProps?.options;
-  const hasLegend = !!legendOptions;
-
-  const noLegendLayout: ContentWithLegendLayout = {
-    legend: {
-      show: false,
-      width: 0,
-      height: 0,
-    },
-    content: {
-      width,
-      height,
-    },
-    margin: {
-      right: 0,
-      bottom: 0,
-    },
-  };
-
-  if (!hasLegend) {
-    return noLegendLayout;
-  }
-
-  const { position } = legendOptions;
-  const mode = getLegendMode(legendOptions.mode);
-
-  let legendWidth;
-  let legendHeight;
-
-  if (mode === 'list') {
-    // TODO: normalize list to share similar height options as the table
-    // when we add more size options.
-    legendWidth = position === 'right' ? 200 : width;
-
-    // TODO: account for number of legend items returned when adjusting legend spacing
-    legendHeight = LEGEND_HEIGHT_SM;
-    if (position === 'right') {
-      legendHeight = height;
-    } else if (height >= PANEL_HEIGHT_LG_BREAKPOINT) {
-      legendHeight = LEGEND_HEIGHT_LG;
-    }
-  } else {
-    // Table mode
-
-    const tableLayout = getTableCellLayout(theme, 'compact');
-
-    const tableColumns = legendProps?.tableProps?.columns || [];
-    const columnsWidth = tableColumns.reduce((total, col) => {
-      if (typeof col.width === 'number') {
-        total += col.width;
-      }
-      return total;
-    }, 0);
-
-    legendWidth = position === 'right' ? TABLE_LEGEND_SIZE[legendSize]['right'] + columnsWidth : width;
-
-    // Use the smaller of the size-based row count or the number of legend items + 1 for the header.
-    const rowsToShow = Math.min(TABLE_LEGEND_SIZE[legendSize]['bottom'], legendProps.data.length + 1);
-    legendHeight = position === 'bottom' ? rowsToShow * tableLayout.height : height;
-  }
-
-  const contentWidth = position === 'right' ? width - legendWidth - spacing : width;
-  const contentHeight = position === 'bottom' ? height - legendHeight - spacing : height;
-
-  if (
-    (position === 'right' && contentWidth < minChildrenWidth) ||
-    (position === 'bottom' && contentHeight < minChildrenHeight)
-  ) {
-    // Legend does not fit. Just show the content.
-    return noLegendLayout;
-  }
-
-  return {
-    legend: {
-      width: legendWidth,
-      height: legendHeight,
-      show: true,
-    },
-    content: {
-      width: contentWidth,
-      height: contentHeight,
-    },
-    margin: {
-      right: position === 'right' ? spacing : 0,
-      bottom: position === 'bottom' ? spacing : 0,
-    },
-  };
-}
