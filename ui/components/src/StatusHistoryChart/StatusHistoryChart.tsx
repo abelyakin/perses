@@ -135,7 +135,7 @@ export function StatusHistoryChart(props: StatusHistoryChartProps) {
         itemStyle: {
           borderWidth: 1,
           borderType: 'solid',
-          borderColor: '#ffffff',
+          borderColor: theme.palette.background.default,
         },
         emphasis: {
           itemStyle: {
