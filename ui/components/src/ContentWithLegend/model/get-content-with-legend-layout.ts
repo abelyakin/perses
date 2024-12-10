@@ -22,15 +22,16 @@ import {
   TABLE_LEGEND_SIZE,
 } from './content-with-legend-model';
 
-const LEGEND_HEIGHT_SM = 40;
-const LEGEND_HEIGHT_LG = 100;
 const LEGEND_ITEM_HEIGHT = 26;
 const LEGEND_ITEM_SPACING = 24;
+const LEGEND_HEIGHT_LG = LEGEND_ITEM_HEIGHT * 4;
+const LEGEND_HEIGHT_SM = LEGEND_ITEM_HEIGHT * 2;
 const CHAR_WIDTH = 6;
 
 function calculateLegendHeight({
   position,
   width,
+  height,
   legendProps,
   legendSize,
   mode,
@@ -38,6 +39,7 @@ function calculateLegendHeight({
 }: {
   position: 'bottom' | 'right';
   width: number;
+  height: number;
   legendProps: Omit<LegendProps, 'width' | 'height'>;
   legendSize: LegendSize;
   mode: LegendMode;
@@ -53,9 +55,14 @@ function calculateLegendHeight({
       }, 0);
 
       const rowCount = Math.ceil(itemsWidth / width);
-
       const calculatedHeight = rowCount * LEGEND_ITEM_HEIGHT;
-      return Math.min(LEGEND_HEIGHT_LG, Math.max(LEGEND_HEIGHT_SM, calculatedHeight));
+      const maxContainerSpace = height * 0.3;
+
+      if (maxContainerSpace < LEGEND_HEIGHT_LG) {
+        return calculatedHeight < maxContainerSpace ? calculatedHeight : LEGEND_HEIGHT_SM;
+      } else {
+        return calculatedHeight < LEGEND_HEIGHT_LG ? calculatedHeight : LEGEND_HEIGHT_LG;
+      }
     }
   } else {
     const tableLayout = getTableCellLayout(theme, 'compact');
@@ -151,7 +158,7 @@ export function getContentWithLegendLayout({
   const mode = getLegendMode(legendOptions.mode);
 
   const legendWidth = calculateLegendWidth({ position, width, legendProps, legendSize, mode });
-  const legendHeight = calculateLegendHeight({ position, width, legendProps, legendSize, mode, theme });
+  const legendHeight = calculateLegendHeight({ position, width, height, legendProps, legendSize, mode, theme });
 
   const contentLayout = calculateContentLayout(
     position,
