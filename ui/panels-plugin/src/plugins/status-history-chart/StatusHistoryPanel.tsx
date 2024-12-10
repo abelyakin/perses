@@ -54,6 +54,7 @@ export function StatusHistoryPanel(props: StatusHistoryChartPanelProps): ReactEl
       <ContentWithLegend
         width={adjustedContentDimensions?.width ?? 400}
         height={adjustedContentDimensions?.height ?? 1000}
+        minChildrenHeight={50}
         legendSize={legend?.size}
         legendProps={
           legend && {

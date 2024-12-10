@@ -15,7 +15,8 @@ import { ReactElement } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { getLegendSize } from '@perses-dev/core';
 import { Legend } from '../Legend';
-import { ContentWithLegendProps, getContentWithLegendLayout } from './model/content-with-legend-model';
+import { ContentWithLegendProps } from './model/content-with-legend-model';
+import { getContentWithLegendLayout } from './model/get-content-with-legend-layout';
 
 /**
  * Component to help lay out content alongside a `Legend` component based on the
@@ -35,6 +36,7 @@ export function ContentWithLegend({
   minChildrenHeight = 100,
 }: ContentWithLegendProps): ReactElement {
   const theme = useTheme();
+
   const { content, legend, margin } = getContentWithLegendLayout({
     width,
     height,

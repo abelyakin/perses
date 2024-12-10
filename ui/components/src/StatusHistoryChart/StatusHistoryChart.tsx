@@ -136,7 +136,7 @@ export const StatusHistoryChart: FC<StatusHistoryChartProps> = (props) => {
         itemStyle: {
           borderWidth: 1,
           borderType: 'solid',
-          borderColor: '#ffffff',
+          borderColor: theme.palette.background.default,
         },
         emphasis: {
           itemStyle: {
