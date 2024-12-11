@@ -138,7 +138,7 @@ const getValueOrLabel = (
   if (label) {
     return label;
   }
-  if (mappings?.length && value) {
+  if (mappings?.length && value !== undefined && value !== null) {
     return applyValueMapping(value, mappings).value;
   } else {
     return value;
