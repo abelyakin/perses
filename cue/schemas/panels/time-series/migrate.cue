@@ -40,7 +40,7 @@ if #panel.type != _|_ if #panel.type == "timeseries" || #panel.type == "graph" {
 			yAxis: format: unit: #unit
 		}
 
-		#decimal: *#panel.fieldConfig.defaults.decimal | null
+		#decimal: *#panel.fieldConfig.defaults.decimals | null
 		if #decimal != null {
 			yAxis: format: decimalPlaces: #decimal
 		}

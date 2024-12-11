@@ -9,7 +9,7 @@
 			format: unit: #unit
 		}
 
-		#decimal: *#panel.fieldConfig.defaults.decimal | null
+		#decimal: *#panel.fieldConfig.defaults.decimals | null
 		if #decimal != null {
 			format: decimalPlaces: #decimal
 		}
