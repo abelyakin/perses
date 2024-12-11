@@ -97,7 +97,7 @@ publish_npm:
        for workspace in ${publish_workspaces}
         do 
           cd "${workspace}"
-          npm publish --registry=http://${NPM_REGISTRY}/ --strict-ssl=false
+          npm publish --strict-ssl=false
           cd ../
         done
   needs:
