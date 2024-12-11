@@ -11,8 +11,7 @@ workflow:
         TAG:  $CI_COMMIT_SHORT_SHA
 
 variables:
-  # publish_workspaces: "components dashboards panels-plugin plugin-system prometheus-plugin core"
-  publish_workspaces: "core"
+  publish_workspaces: "components dashboards panels-plugin plugin-system prometheus-plugin core"
 
 stages:
   - lint_tests
