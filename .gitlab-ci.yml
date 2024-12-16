@@ -66,8 +66,8 @@ check_version:
   - docker
   image:  hbr-1.int.ops.cldx.ru/cx-os/nodejs:21.6.1 
   script:
+    - apt update && apt install -y jq  
     - cd ui
-    # - ../scripts/cx_ui_release.sh --check-version $CI_COMMIT_TAG $publish_workspaces
     - ../scripts/cx_ui_release.sh --check-version $CI_COMMIT_TAG $publish_workspaces
   rules:
     - if: $CI_COMMIT_TAG =~ /^v.*/ 
@@ -161,5 +161,4 @@ deploy:
     - 'curl --fail --request POST -F token="$TRIGGER_TOKEN" -F variables["IS_PERSES_REPO"]=true  -F variables["TRIGGER_PROJECT_NAME"]="$CI_PROJECT_PATH" -F variables["MR_NAME"]="$PIPE_NAME" -F ref=dev ${repo_url}/${project_id}/trigger/pipeline'
   rules:
     - if: '($CI_COMMIT_REF_NAME == "cx-dev" && $CI_PIPELINE_SOURCE == "push") || ($CI_COMMIT_TAG =~ /^RC-.*/ || $CI_COMMIT_TAG =~ /^v.*/)'
-      when: always
     - when: never

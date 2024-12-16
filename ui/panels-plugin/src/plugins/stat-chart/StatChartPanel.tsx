@@ -59,7 +59,8 @@ export const StatChartPanel: FC<StatChartPanelProps> = (props) => {
     chartWidth = MIN_WIDTH;
   }
 
-  const noDataTextStyle = (chartsTheme.noDataOption.title as TitleComponentOption).textStyle;
+  //MON-788: add no data placeholder from theme
+  const { textStyle: noDataTextStyle, text: noDataText } = chartsTheme.noDataOption.title as TitleComponentOption;
 
   return (
     <Stack
@@ -91,7 +92,7 @@ export const StatChartPanel: FC<StatChartPanelProps> = (props) => {
           );
         })
       ) : (
-        <Typography sx={{ ...noDataTextStyle } as SxProps}>No data</Typography>
+        <Typography sx={{ ...noDataTextStyle } as SxProps}>{noDataText}</Typography>
       )}
     </Stack>
   );

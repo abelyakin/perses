@@ -28,7 +28,9 @@ import { PanelOptions } from '../Panel';
 import { GridTitle } from './GridTitle';
 import { GridItemContent } from './GridItemContent';
 import { GridContainer } from './GridContainer';
-const DEFAULT_MARGIN = 10;
+
+// MON-792: Increased margin from 10px to 16px between grid items
+const DEFAULT_MARGIN = 16;
 const ROW_HEIGHT = 30;
 
 export interface GridLayoutProps {
