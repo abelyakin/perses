@@ -35,7 +35,7 @@
 			sparkline: {}
 		}
 
-		#fontsize: *#panel.options.text.valueSize
+		#fontsize: *#panel.options.text.valueSize | null
 		if #fontsize != null {
 			valueFontSize: #fontsize
 		}
