@@ -35,6 +35,11 @@
 			sparkline: {}
 		}
 
+		#fontsize: *#panel.options.text.valueSize | null
+		if #fontsize != null {
+			valueFontSize: #fontsize
+		}
+
 		// Using flatten to avoid having an array of arrays with "value" mappings
 		// (https://cuelang.org/docs/howto/use-list-flattenn-to-flatten-lists/)
 		let x = list.FlattenN([
