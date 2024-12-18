@@ -46,7 +46,7 @@ function checkPackage() {
 
 
 
-if [[ $1 == "--releasa" ]]; then
+if [[ $1 == "--release" ]]; then
   bumpVersion $2 "${@:3}"
 fi
 
