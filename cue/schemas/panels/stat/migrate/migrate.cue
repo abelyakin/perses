@@ -34,12 +34,9 @@ import "list"
 kind: "StatChart"
 spec: {
 	calculation: *commonMigrate.#mapping.calc[#panel.options.reduceOptions.calcs[0]] | commonMigrate.#defaultCalc // only consider [0] here as Perses's GaugeChart doesn't support individual calcs
-    #metricLabel: *#panel.options.reduceOptions.fields | null
-	if #metricLabel != null {
-		metricLabel: #metricLabel
-	}
-	#unit: *commonMigrate.#mapping.unit[#panel.fieldConfig.defaults.unit] | null
-	if #unit != null {
+
+	#unit: *commonMigrate.#mapping.unit[#panel.fieldConfig.defaults.unit] | "decimal"
+	{
 		format: unit: #unit
 	}
 	#decimal: *#panel.fieldConfig.defaults.decimal | *#panel.fieldConfig.defaults.decimals | null
