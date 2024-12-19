@@ -4,8 +4,8 @@
 
 		calculation: *#mapping.calc[#panel.options.reduceOptions.calcs[0]] | #defaultCalc // only consider [0] here as Perses's PieChart doesn't support individual calcs
 
-		#unit: *#mapping.unit[#panel.fieldConfig.defaults.unit] | null
-		if #unit != null {
+		#unit: *#mapping.unit[#panel.fieldConfig.defaults.unit] | "decimal"
+		{
 			format: unit: #unit
 		}
 

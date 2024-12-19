@@ -6,8 +6,8 @@
 			metricLabel: strings.Replace(strings.Replace(#panel.options.reduceOptions.fields, "/^", "", 1), "$/", "", 1)
 		}
 
-		#unit: *#mapping.unit[#panel.fieldConfig.defaults.unit] | null
-		if #unit != null {
+		#unit: *#mapping.unit[#panel.fieldConfig.defaults.unit] | "decimal"
+		{
 			format: unit: #unit
 		}
 
