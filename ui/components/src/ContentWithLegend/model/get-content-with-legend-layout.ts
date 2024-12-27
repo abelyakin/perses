@@ -14,7 +14,7 @@
 import { Theme } from '@mui/material';
 import { getLegendMode, LegendMode, LegendSize } from '@perses-dev/core';
 import { LegendItem, LegendProps } from '../../Legend';
-import { getTableCellLayout, TableColumnConfig } from '../../Table/model/table-model';
+import { getTableCellLayout, TableColumnConfig } from '../../Table';
 import {
   ContentWithLegendLayout,
   ContentWithLegendLayoutOpts,
@@ -47,7 +47,7 @@ function calculateLegendHeight({
 }): number {
   if (mode === 'list') {
     if (position === 'right') {
-      return width;
+      return height;
     } else {
       const itemsWidth = legendProps.data.reduce((acc: number, item: LegendItem) => {
         const itemLength = item.label.length * CHAR_WIDTH + LEGEND_ITEM_SPACING;
@@ -67,7 +67,8 @@ function calculateLegendHeight({
   } else {
     const tableLayout = getTableCellLayout(theme, 'compact');
     const rowsToShow = Math.min(TABLE_LEGEND_SIZE[legendSize]['bottom'], legendProps.data.length + 1);
-    return position === 'bottom' ? rowsToShow * tableLayout.height : width;
+
+    return position === 'bottom' ? rowsToShow * tableLayout.height : height;
   }
 }
 
