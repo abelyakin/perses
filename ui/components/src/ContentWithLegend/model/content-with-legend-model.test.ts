@@ -14,11 +14,8 @@
 import { createTheme } from '@mui/material';
 import { legendModes, legendSizes } from '@perses-dev/core';
 import * as table from '../../Table';
-import {
-  ContentWithLegendLayoutOpts,
-  TABLE_LEGEND_SIZE,
-  getContentWithLegendLayout,
-} from './content-with-legend-model';
+import { ContentWithLegendLayoutOpts, TABLE_LEGEND_SIZE } from './content-with-legend-model';
+import { getContentWithLegendLayout } from './get-content-with-legend-layout';
 
 // Workaround to get spyOn to work without a cannot redefine property error.
 // https://github.com/microsoft/TypeScript/issues/43081#issuecomment-1352352654
@@ -216,7 +213,18 @@ describe('getContentWithLegendLayout', () => {
               position: 'bottom',
               mode: mode,
             },
-            data: [],
+            data: [
+              {
+                id: '1',
+                label: 'one',
+                color: '#ff0000',
+              },
+              {
+                id: '2',
+                label: 'two',
+                color: '#00FF00',
+              },
+            ],
             selectedItems: 'ALL',
             onSelectedItemsChange: jest.fn(),
           },
