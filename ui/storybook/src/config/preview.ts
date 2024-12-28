@@ -15,7 +15,8 @@ import { isHappoRun, setThemeSwitcher } from 'happo-plugin-storybook/register';
 import { DARK_MODE_EVENT_NAME } from 'storybook-dark-mode';
 import { initialize as initializeMSW, mswDecorator } from 'msw-storybook-addon';
 import { DocsContainer } from './DocsContainer';
-import { WithThemes, WithBackground, WithTimeZone } from './decorators';
+import { WithBackground, WithTimeZone } from './decorators';
+import { WithCxThemes } from './decorators/cx-override/WithCxThemes';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -104,4 +105,4 @@ setThemeSwitcher(async (theme, channel) => {
 
 initializeMSW({ onUnhandledRequest: 'bypass' });
 
-export const decorators = [mswDecorator, WithTimeZone, WithBackground, WithThemes];
+export const decorators = [mswDecorator, WithTimeZone, WithBackground, WithCxThemes];

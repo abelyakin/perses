@@ -1,0 +1,14 @@
+FROM docker.cldx.io/golang:1.23-bookworm  AS build-env
+ARG NODE_VER=20.14.0
+RUN apt update && apt install -y mailcap wget make
+RUN mkdir /perses
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash; \
+    . ~/.bashrc && nvm install $NODE_VER
+COPY . .
+RUN . ~/.bashrc && cd ./ui && npm install && npm run storybook:build
+
+FROM hbr-1.int.ops.cldx.ru/cx-os/nginx:1.26.0
+
+USER nginx
+COPY --from=build-env --chown=nginx:nginx  /go/ui/storybook/storybook-static/  /var/www/html/
+EXPOSE 8080
