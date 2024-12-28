@@ -3,7 +3,7 @@
 	spec: {
 		calculation: *#mapping.calc[#panel.options.reduceOptions.calcs[0]] | #defaultCalc // only consider [0] here as Perses's GaugeChart doesn't support individual calcs
 		if (*#panel.options.reduceOptions.fields | _|_) != _|_ {
-			metricLabel: strings.Replace(strings.Replace(#panel.options.reduceOptions.fields, "/^", "", 1), "$/", "", 1)
+			metricLabel: #panel.options.reduceOptions.fields
 		}
 
 		#unit: *#mapping.unit[#panel.fieldConfig.defaults.unit] | "decimal"
