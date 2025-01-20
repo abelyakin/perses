@@ -60,11 +60,11 @@ const pkgConfig: PkgConfig[] = [
   //   directory: path.resolve(uiRoot, 'explore/src'),
   //   title: 'Explore',
   // },
-  // {
-  //   pkg: '@perses-dev/panels-plugin',
-  //   directory: path.resolve(uiRoot, 'panels-plugin/src'),
-  //   title: 'Panels Plugin',
-  // },
+  {
+    pkg: '@perses-dev/panels-plugin',
+    directory: path.resolve(uiRoot, 'panels-plugin/src'),
+    title: 'Panels Plugin',
+  },
   // {
   //   pkg: '@perses-dev/plugin-system',
   //   directory: path.resolve(uiRoot, 'plugin-system/src'),
@@ -78,7 +78,6 @@ const pkgConfig: PkgConfig[] = [
 ];
 
 // File selector for stories.
-const BASE_STORY_SELECTOR = '*.stories.@(ts|tsx|mdx)';
 const config: StorybookConfig = {
   framework: {
     name: '@storybook/react-webpack5',
@@ -103,16 +102,7 @@ const config: StorybookConfig = {
     //   };
     // }),
     // Higher level stories that live alongside the storybook setup.
-    '../../../components/src/BarChart/BarChart.stories.tsx',
-    '../../../components/src/GaugeChart/GaugeChart.stories.tsx',
-    '../../../components/src/LineChart/LineChart.stories.tsx',
-    '../../../components/src/PieChart/PieChart.stories.tsx',
-    '../../../components/src/StatusHistoryChart/StatusHistoryChart.stories.tsx',
-    '../../../components/src/StatChart/StatChart.stories.tsx',
-    '../../../components/src/Table/Table.stories.tsx',
-    '../../../components/src/TimeChart/TimeChart.stories.tsx',
-
-    '../stories/**/*.@(mdx|stories.@(ts|tsx))',
+    '../cx-panels/**/*.stories.@(ts|tsx)',
   ],
   typescript: {
     reactDocgen: 'react-docgen-typescript',

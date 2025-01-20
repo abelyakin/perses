@@ -25,24 +25,14 @@ export const WithCxThemes: Decorator = (Story) => {
         <Card
           component="section"
           sx={{
-            width: 'fit-content',
-            height: '100%',
+            width: '800px',
+            height: '500px',
             display: 'flex',
             flexFlow: 'column nowrap',
           }}
           variant="outlined"
           data-testid="panel"
         >
-          <PanelHeader
-            // extra={panelOptions?.extra?.({ panelDefinition: definition, panelGroupItemId })}
-            id="yo"
-            title="hello"
-            // description={definition.spec.display.description}
-            // readHandlers={readHandlers}
-            // editHandlers={editHandlers}
-            // links={definition.spec.links}
-            sx={{ paddingX: `${chartsTheme.container.padding.default}px` }}
-          />
           <Story />
         </Card>
       </ChartsProvider>
