@@ -45,36 +45,36 @@ const pkgConfig: PkgConfig[] = [
     directory: path.resolve(uiRoot, 'components/src'),
     title: 'Components',
   },
-  {
-    pkg: '@perses-dev/core',
-    directory: path.resolve(uiRoot, 'core/src'),
-    title: 'Core',
-  },
-  {
-    pkg: '@perses-dev/dashboards',
-    directory: path.resolve(uiRoot, 'dashboards/src'),
-    title: 'Dashboards',
-  },
-  {
-    pkg: '@perses-dev/explore',
-    directory: path.resolve(uiRoot, 'explore/src'),
-    title: 'Explore',
-  },
-  {
-    pkg: '@perses-dev/panels-plugin',
-    directory: path.resolve(uiRoot, 'panels-plugin/src'),
-    title: 'Panels Plugin',
-  },
-  {
-    pkg: '@perses-dev/plugin-system',
-    directory: path.resolve(uiRoot, 'plugin-system/src'),
-    title: 'Plugin System',
-  },
-  {
-    pkg: '@perses-dev/prometheus-plugin',
-    directory: path.resolve(uiRoot, 'prometheus-plugin/src'),
-    title: 'Prometheus Plugin',
-  },
+  // {
+  //   pkg: '@perses-dev/core',
+  //   directory: path.resolve(uiRoot, 'core/src'),
+  //   title: 'Core',
+  // },
+  // {
+  //   pkg: '@perses-dev/dashboards',
+  //   directory: path.resolve(uiRoot, 'dashboards/src'),
+  //   title: 'Dashboards',
+  // },
+  // {
+  //   pkg: '@perses-dev/explore',
+  //   directory: path.resolve(uiRoot, 'explore/src'),
+  //   title: 'Explore',
+  // },
+  // {
+  //   pkg: '@perses-dev/panels-plugin',
+  //   directory: path.resolve(uiRoot, 'panels-plugin/src'),
+  //   title: 'Panels Plugin',
+  // },
+  // {
+  //   pkg: '@perses-dev/plugin-system',
+  //   directory: path.resolve(uiRoot, 'plugin-system/src'),
+  //   title: 'Plugin System',
+  // },
+  // {
+  //   pkg: '@perses-dev/prometheus-plugin',
+  //   directory: path.resolve(uiRoot, 'prometheus-plugin/src'),
+  //   title: 'Prometheus Plugin',
+  // },
 ];
 
 // File selector for stories.
@@ -95,14 +95,23 @@ const config: StorybookConfig = {
   stories: [
     // Package-specific stories that live alongside their components or in
     // the `stories` directory.
-    ...pkgConfig.map(({ directory, title }) => {
-      return {
-        directory,
-        titlePrefix: title,
-        files: `**/${BASE_STORY_SELECTOR}`,
-      };
-    }),
+    // ...pkgConfig.map(({ directory, title }) => {
+    //   return {
+    //     directory,
+    //     titlePrefix: title,
+    //     files: `**/${BASE_STORY_SELECTOR}`,
+    //   };
+    // }),
     // Higher level stories that live alongside the storybook setup.
+    '../../../components/src/BarChart/BarChart.stories.tsx',
+    '../../../components/src/GaugeChart/GaugeChart.stories.tsx',
+    '../../../components/src/LineChart/LineChart.stories.tsx',
+    '../../../components/src/PieChart/PieChart.stories.tsx',
+    '../../../components/src/StatusHistoryChart/StatusHistoryChart.stories.tsx',
+    '../../../components/src/StatChart/StatChart.stories.tsx',
+    '../../../components/src/Table/Table.stories.tsx',
+    '../../../components/src/TimeChart/TimeChart.stories.tsx',
+
     '../stories/**/*.@(mdx|stories.@(ts|tsx))',
   ],
   typescript: {
