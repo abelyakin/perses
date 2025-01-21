@@ -78,7 +78,6 @@ const pkgConfig: PkgConfig[] = [
 ];
 
 // File selector for stories.
-const BASE_STORY_SELECTOR = '*.stories.@(ts|tsx|mdx)';
 const config: StorybookConfig = {
   framework: {
     name: '@storybook/react-webpack5',
@@ -93,17 +92,8 @@ const config: StorybookConfig = {
     'storybook-dark-mode',
   ],
   stories: [
-    // Package-specific stories that live alongside their components or in
-    // the `stories` directory.
-    ...pkgConfig.map(({ directory, title }) => {
-      return {
-        directory,
-        titlePrefix: title,
-        files: `**/${BASE_STORY_SELECTOR}`,
-      };
-    }),
-    // Higher level stories that live alongside the storybook setup.
-    '../stories/**/*.@(mdx|stories.@(ts|tsx))',
+    // folder with CX Overrides
+    '../cx-panels/**/*.stories.@(ts|tsx)',
   ],
   typescript: {
     reactDocgen: 'react-docgen-typescript',
