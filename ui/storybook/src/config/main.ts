@@ -45,36 +45,36 @@ const pkgConfig: PkgConfig[] = [
     directory: path.resolve(uiRoot, 'components/src'),
     title: 'Components',
   },
-  // {
-  //   pkg: '@perses-dev/core',
-  //   directory: path.resolve(uiRoot, 'core/src'),
-  //   title: 'Core',
-  // },
-  // {
-  //   pkg: '@perses-dev/dashboards',
-  //   directory: path.resolve(uiRoot, 'dashboards/src'),
-  //   title: 'Dashboards',
-  // },
-  // {
-  //   pkg: '@perses-dev/explore',
-  //   directory: path.resolve(uiRoot, 'explore/src'),
-  //   title: 'Explore',
-  // },
+  {
+    pkg: '@perses-dev/core',
+    directory: path.resolve(uiRoot, 'core/src'),
+    title: 'Core',
+  },
+  {
+    pkg: '@perses-dev/dashboards',
+    directory: path.resolve(uiRoot, 'dashboards/src'),
+    title: 'Dashboards',
+  },
+  {
+    pkg: '@perses-dev/explore',
+    directory: path.resolve(uiRoot, 'explore/src'),
+    title: 'Explore',
+  },
   {
     pkg: '@perses-dev/panels-plugin',
     directory: path.resolve(uiRoot, 'panels-plugin/src'),
     title: 'Panels Plugin',
   },
-  // {
-  //   pkg: '@perses-dev/plugin-system',
-  //   directory: path.resolve(uiRoot, 'plugin-system/src'),
-  //   title: 'Plugin System',
-  // },
-  // {
-  //   pkg: '@perses-dev/prometheus-plugin',
-  //   directory: path.resolve(uiRoot, 'prometheus-plugin/src'),
-  //   title: 'Prometheus Plugin',
-  // },
+  {
+    pkg: '@perses-dev/plugin-system',
+    directory: path.resolve(uiRoot, 'plugin-system/src'),
+    title: 'Plugin System',
+  },
+  {
+    pkg: '@perses-dev/prometheus-plugin',
+    directory: path.resolve(uiRoot, 'prometheus-plugin/src'),
+    title: 'Prometheus Plugin',
+  },
 ];
 
 // File selector for stories.
@@ -92,16 +92,7 @@ const config: StorybookConfig = {
     'storybook-dark-mode',
   ],
   stories: [
-    // Package-specific stories that live alongside their components or in
-    // the `stories` directory.
-    // ...pkgConfig.map(({ directory, title }) => {
-    //   return {
-    //     directory,
-    //     titlePrefix: title,
-    //     files: `**/${BASE_STORY_SELECTOR}`,
-    //   };
-    // }),
-    // Higher level stories that live alongside the storybook setup.
+    // folder with CX Overrides
     '../cx-panels/**/*.stories.@(ts|tsx)',
   ],
   typescript: {
