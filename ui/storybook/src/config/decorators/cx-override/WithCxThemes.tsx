@@ -14,7 +14,6 @@
 import { Card, CssBaseline, ThemeProvider } from '@mui/material';
 import { Decorator } from '@storybook/react';
 import { ChartsProvider } from '@perses-dev/components';
-import { PanelHeader } from '../../../../../dashboards/src/components/Panel/PanelHeader';
 import { chartsTheme, theme } from './theme';
 
 export const WithCxThemes: Decorator = (Story) => {
