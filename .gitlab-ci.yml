@@ -121,6 +121,21 @@ publish_npm:
     - if: $CI_COMMIT_TAG =~ /^v.*/ 
     - when: never
 
+build_storybook:
+  tags:
+    - shell
+  stage:  build
+  script:  
+    - |
+      export VERS=$(cat "./ui/.nvmrc")
+      docker login $HARBOR_REGISTRY -u $HARBOR_REGISTRY_USERNAME -p $HARBOR_REGISTRY_PASSWORD 2>/dev/null
+      docker build -f Dockerfile-cx-storybook -t $HARBOR_REGISTRY/cx-mon/storybook-observ-ui-perses:$TAG --build-arg NODE_VERS=${VERS:1} .
+      docker tag $HARBOR_REGISTRY/cx-mon/storybook-observ-ui-perses:$TAG $HARBOR_REGISTRY/cx-mon/storybook-observ-ui-perses:latest
+      docker push -a $HARBOR_REGISTRY/cx-mon/storybook-observ-ui-perses
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^RC-.*/ || $CI_COMMIT_TAG =~ /^v.*/ || $CI_COMMIT_BRANCH == "cx-dev"'
+    - when: never
+
 build_server:
   tags:
     - shell
