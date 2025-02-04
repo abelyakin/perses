@@ -159,6 +159,9 @@ func (v *TemplateVar) UnmarshalJSON(data []byte) error {
 }
 
 func (v *TemplateVar) getDefaultValue() *variable.DefaultValue {
+	if v.Current.Value == nil && (v.IncludeAll != nil && *v.IncludeAll) {
+		return "$__all"
+	}
 	if v.Current == nil {
 		return nil
 	}

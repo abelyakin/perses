@@ -78,6 +78,9 @@ func grafanaMappingSort(sort *int) *variable.Sort {
 func (m *mig) migrateVariables(grafanaDashboard *SimplifiedDashboard) []dashboard.Variable {
 	var result []dashboard.Variable
 	for _, v := range grafanaDashboard.Templating.List {
+		if v.Type == "datasource" || v.Type == "adhoc" {
+			continue
+		}
 		if v.Type == "constant" || v.Type == "textbox" {
 			persesStaticVariable := migrateTextVariable(v)
 			if persesStaticVariable == nil {

@@ -130,6 +130,10 @@ func (m *mig) migrateGrid(grafanaDashboard *SimplifiedDashboard) []dashboard.Lay
 				},
 			})
 		} else {
+			title := ""
+			if panel.Title != nil {
+				title = *panel.Title
+			}
 			spec := &dashboard.GridLayoutSpec{
 				Display: &dashboard.GridLayoutDisplay{
 					Title: panel.Title,

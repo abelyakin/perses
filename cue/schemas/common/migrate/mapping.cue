@@ -39,6 +39,8 @@ package migrate
 		Bps: "bytes/sec"
 		cps: "counts/sec"
 		// TODO add mappings for all throughput units
+		mps: "messages/sec"
+		pps: "packets/sec"
 	}
 	// mapping table for the calculation attribute (key = grafana unit, value = perses equivalent)
 	calc: {
