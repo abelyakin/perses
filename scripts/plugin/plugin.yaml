@@ -21,7 +21,7 @@
 - name: "Tempo"
   version: "0.1.0-cx1"
 - name: "TimeSeriesChart"
-  version: "0.4.1-cx1"
+  version: "0.4.1-cx3"
 - name: "TimeSeriesTable"
   version: "0.4.0-cx1"
 - name: "TraceTable"
