@@ -105,7 +105,7 @@ spec: {
 
 	// cldx patch: add categorical to map custom color palette.
 	// https://github.com/perses/perses/blob/main/docs/plugins/panels.md#palette-specification
-	visual: palette: {
+	#visual: palette: {
 		mode: "categorical"
 	}
 

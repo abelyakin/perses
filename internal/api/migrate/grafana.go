@@ -162,7 +162,7 @@ func (v *TemplateVar) getDefaultValue() *variable.DefaultValue {
 	if v.Current.Value == nil && (v.IncludeAll != nil && *v.IncludeAll) {
 		defaultValue := variable.DefaultValue{
 			SingleValue: "$__all",
-			SliceValues: nil, // Optional: leave empty or initialize as needed
+			SliceValues: nil,
 		}
 		return &defaultValue
 	}
