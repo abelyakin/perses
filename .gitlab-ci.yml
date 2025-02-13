@@ -156,7 +156,7 @@ build_server:
       docker build -f Dockerfile-cx -t $HARBOR_REGISTRY/cx-mon/observ-ui-perses:$TAG --build-arg NODE_VERS=${VERS:1} .
       # docker tag $HARBOR_REGISTRY/cx-mon/observ-ui-perses:$TAG $HARBOR_REGISTRY/cx-mon/observ-ui-perses:latest
       docker push -a $HARBOR_REGISTRY/cx-mon/observ-ui-perses
-  # extends: .rules_build
+  extends: .rules_build
 
 build_cli:
   tags:
@@ -168,7 +168,7 @@ build_cli:
       docker build -f Dockerfile-cx-cli -t $HARBOR_REGISTRY/cx-mon/percli:$TAG .
       # docker tag $HARBOR_REGISTRY/cx-mon/percli:$TAG $HARBOR_REGISTRY/cx-mon/percli:latest
       docker push -a $HARBOR_REGISTRY/cx-mon/percli
-  # extends: .rules_build
+  extends: .rules_build
 
 
 .deploy:
