@@ -97,7 +97,7 @@ type TemplateVar struct {
 	Label       string          `json:"label"`
 	Hide        int             `json:"hide"`
 	Sort        *int            `json:"sort,omitempty"`
-	IncludeAll  bool            `json:"includeAll"`
+	IncludeAll  *bool           `json:"includeAll"`
 	AllValue    string          `json:"allValue"`
 	Multi       bool            `json:"multi"`
 	Current     *CurrentValue   `json:"current,omitempty"`
@@ -160,7 +160,11 @@ func (v *TemplateVar) UnmarshalJSON(data []byte) error {
 
 func (v *TemplateVar) getDefaultValue() *variable.DefaultValue {
 	if v.Current.Value == nil && (v.IncludeAll != nil && *v.IncludeAll) {
-		return "$__all"
+		defaultValue := variable.DefaultValue{
+			SingleValue: "$__all",
+			SliceValues: nil, // Optional: leave empty or initialize as needed
+		}
+		return &defaultValue
 	}
 	if v.Current == nil {
 		return nil
