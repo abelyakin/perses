@@ -56,19 +56,14 @@ spec: {
 	}
 
 	// yAxis
-	#unit: *commonMigrate.#mapping.unit[#panel.fieldConfig.defaults.unit] | "decimal"
+	#unit: *#mapping.unit[#panel.fieldConfig.defaults.unit] | "decimal"
 	{
-		format: unit: #unit
+		yAxis: format: unit: #unit
 	}
 
-	#decimal: *#panel.fieldConfig.defaults.decimal | *#panel.fieldConfig.defaults.decimals | null
+	#decimal: *#panel.fieldConfig.defaults.decimals | null
 	if #decimal != null {
-		yAxis: format: {
-			decimalPlaces: #decimal
-			if #unit == null {
-				unit: "decimal"
-			}
-		}
+		yAxis: format: decimalPlaces: #decimal
 	}
 
 	#min: *#panel.fieldConfig.defaults.min | null
