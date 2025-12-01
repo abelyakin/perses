@@ -65,6 +65,7 @@ export interface PanelActionsProps {
   queryResults: QueryData[];
   pluginActions?: ReactNode[];
   showIcons: PanelOptions['showIcons'];
+  enabledActions?: PanelOptions['enabledActions'];
 }
 
 const ConditionalBox = styled(Box)({
@@ -86,8 +87,13 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
   queryResults,
   pluginActions = [],
   showIcons,
+  enabledActions,
 }) => {
-  const descriptionAction = useMemo((): ReactNode | undefined => {
+  const isEnabled = (action: PanelActionType): boolean =>
+    enabledActions === undefined || enabledActions.includes(action);
+
+  const descriptionAction = useMemo((): ReactNode => {
+    if (!isEnabled('description')) return null;
     if (description && description.trim().length > 0) {
       return (
         <InfoTooltip id={descriptionTooltipId} description={description} enterDelay={100}>
@@ -102,13 +108,25 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
         </InfoTooltip>
       );
     }
-    return undefined;
-  }, [descriptionTooltipId, description]);
+    return null;
+  }, [descriptionTooltipId, description, enabledActions]);
 
-  const linksAction = links && links.length > 0 && <PanelLinks links={links} />;
-  const extraActions = editHandlers === undefined && extra;
+  const linksAction = useMemo((): ReactNode => {
+    if (!isEnabled('links')) return null;
+    if (links && links.length > 0) {
+      return <PanelLinks links={links} />;
+    }
+    return null;
+  }, [links, enabledActions]);
 
-  const queryStateIndicator = useMemo((): ReactNode | undefined => {
+  const extraActions = useMemo((): ReactNode => {
+    if (editHandlers === undefined && extra) {
+      return <>{extra}</>;
+    }
+    return null;
+  }, [editHandlers, extra, enabledActions]);
+
+  const queryStateIndicator = useMemo((): ReactNode => {
     const hasData = queryResults.some((q) => q.data);
     const isFetching = queryResults.some((q) => q.isFetching);
     const queryErrors = queryResults.filter((q) => q.error);
@@ -134,9 +152,11 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
         </InfoTooltip>
       );
     }
-  }, [queryResults]);
+    return null;
+  }, [queryResults, enabledActions]);
 
-  const noticesIndicator = useMemo(() => {
+  const noticesIndicator = useMemo((): ReactNode => {
+    if (!isEnabled('notices')) return null;
     const notices = queryResults.flatMap((q) => {
       return q.data?.metadata?.notices ?? [];
     });
@@ -152,9 +172,11 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
         </InfoTooltip>
       );
     }
-  }, [queryResults]);
+    return null;
+  }, [queryResults, enabledActions]);
 
-  const readActions = useMemo((): ReactNode | undefined => {
+  const readActions = useMemo((): ReactNode => {
+    if (!isEnabled('fullscreen')) return null;
     if (readHandlers !== undefined) {
       return (
         <InfoTooltip description={TOOLTIP_TEXT.viewPanel}>
@@ -172,10 +194,11 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
         </InfoTooltip>
       );
     }
-    return undefined;
-  }, [readHandlers, title]);
+    return null;
+  }, [readHandlers, title, enabledActions]);
 
-  const viewQueryAction = useMemo(() => {
+  const viewQueryAction = useMemo((): ReactNode => {
+    if (!isEnabled('viewQueries')) return null;
     if (!viewQueriesHandler?.onClick) return null;
     return (
       <InfoTooltip description={TOOLTIP_TEXT.queryView}>
@@ -188,11 +211,10 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
         </HeaderIconButton>
       </InfoTooltip>
     );
-  }, [viewQueriesHandler, title]);
+  }, [viewQueriesHandler, title, enabledActions]);
 
-  const editActions = useMemo((): ReactNode | undefined => {
+  const editActions = useMemo((): ReactNode => {
     if (editHandlers !== undefined) {
-      // If there are edit handlers, always just show the edit buttons
       return (
         <>
           <InfoTooltip description={TOOLTIP_TEXT.editPanel}>
@@ -232,10 +254,10 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
         </>
       );
     }
-    return undefined;
+    return null;
   }, [editHandlers, title]);
 
-  const moveAction = useMemo((): ReactNode | undefined => {
+  const moveAction = useMemo((): ReactNode => {
     if (editActions && !readHandlers?.isPanelViewed) {
       return (
         <InfoTooltip description={TOOLTIP_TEXT.movePanel}>
@@ -245,8 +267,14 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
         </InfoTooltip>
       );
     }
-    return undefined;
+    return null;
   }, [editActions, readHandlers, title]);
+
+  const renderedPluginActions = useMemo((): ReactNode => {
+    if (!isEnabled('pluginActions')) return null;
+    if (pluginActions.length === 0) return null;
+    return <>{pluginActions}</>;
+  }, [pluginActions, enabledActions]);
 
   const divider = <Box sx={{ flexGrow: 1 }}></Box>;
 
@@ -265,8 +293,14 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
         {divider}
         <OnHover>
           <OverflowMenu title={title}>
-            {descriptionAction} {linksAction} {queryStateIndicator} {noticesIndicator} {extraActions} {viewQueryAction}
-            {readActions} {pluginActions}
+            {descriptionAction}
+            {linksAction}
+            {queryStateIndicator}
+            {noticesIndicator}
+            {extraActions}
+            {viewQueryAction}
+            {readActions}
+            {renderedPluginActions}
             {editActions}
           </OverflowMenu>
           {moveAction}
@@ -282,15 +316,19 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
         })}
       >
         <OnHover>
-          {descriptionAction} {linksAction}
+          {descriptionAction}
+          {linksAction}
         </OnHover>
-        {divider} {queryStateIndicator}
+        {divider}
+        {queryStateIndicator}
         {noticesIndicator}
         <OnHover>
           {extraActions}
           {readActions}
           <OverflowMenu title={title}>
-            {editActions} {viewQueryAction} {pluginActions}
+            {editActions}
+            {viewQueryAction}
+            {renderedPluginActions}
           </OverflowMenu>
           {moveAction}
         </OnHover>
@@ -305,16 +343,24 @@ export const PanelActions: React.FC<PanelActionsProps> = ({
         })}
       >
         <OnHover>
-          {descriptionAction} {linksAction}
+          {descriptionAction}
+          {linksAction}
         </OnHover>
-        {divider} {queryStateIndicator}
+        {divider}
+        {queryStateIndicator}
         {noticesIndicator}
         <OnHover>
           {extraActions}
           {viewQueryAction}
-          {readActions} {editActions}
+          {readActions}
+          {editActions}
           {/* Show plugin actions inside a menu if it gets crowded */}
-          {pluginActions.length <= 1 ? pluginActions : <OverflowMenu title={title}>{pluginActions}</OverflowMenu>}
+          {renderedPluginActions &&
+            (pluginActions.length <= 1 ? (
+              renderedPluginActions
+            ) : (
+              <OverflowMenu title={title}>{renderedPluginActions}</OverflowMenu>
+            ))}
           {moveAction}
         </OnHover>
       </ConditionalBox>

@@ -13,4 +13,6 @@
 
 export * from './HeaderIconButton';
 export * from './Panel';
+export { PANEL_ACTIONS } from './Panel';
+export type { PanelActionType } from './Panel';
 export * from './PanelPluginLoader';

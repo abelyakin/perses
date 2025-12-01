@@ -20,6 +20,26 @@ import useResizeObserver from 'use-resize-observer';
 import { PanelContent } from './PanelContent';
 import { PanelHeader, PanelHeaderProps } from './PanelHeader';
 
+/**
+ * Constants for panel header actions
+ */
+export const PANEL_ACTIONS = {
+  // Info icon showing panel description tooltip
+  DESCRIPTION: 'description',
+  // External links dropdown
+  LINKS: 'links',
+  // Warning/info notices from query results
+  NOTICES: 'notices',
+  // Button to open query inspector dialog
+  QUERY_INSPECTOR: 'viewQueries',
+  // Expand/collapse panel to fullscreen
+  FULLSCREEN: 'fullscreen',
+  // Custom actions from panel plugins
+  PLUGIN_ACTIONS: 'pluginActions',
+} as const;
+
+export type PanelActionType = (typeof PANEL_ACTIONS)[keyof typeof PANEL_ACTIONS];
+
 export interface PanelProps extends CardProps<'section'> {
   definition: PanelDefinition;
   readHandlers?: PanelHeaderProps['readHandlers'];
@@ -45,6 +65,12 @@ export type PanelOptions = {
    * It will only be rendered when the panel is in edit mode.
    */
   extra?: (props: PanelExtraProps) => ReactNode;
+  /**
+   * Controls which actions are visible in the panel header.
+   * - undefined: show all actions (default Perses behavior)
+   * - defined array: show ONLY the listed actions (whitelist)
+   */
+  enabledActions?: PanelActionType[];
 };
 
 export type PanelExtraProps = {
@@ -234,6 +260,7 @@ export const Panel = memo(function Panel(props: PanelProps) {
           links={definition.spec.links}
           pluginActions={pluginActions}
           showIcons={showIcons}
+          enabledActions={panelOptions?.enabledActions}
           sx={{ py: '2px', pl: '8px', pr: '2px' }}
           dimension={contentDimensions}
         />
